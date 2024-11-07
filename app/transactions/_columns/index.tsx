@@ -1,36 +1,14 @@
 "use client";
 
 
-import { Transaction, TransactionCategory, TransactionPaymentMethod } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "./_componentes/type-badge";
 import { Button } from "@/app/_components/ui/button";
 import { PencilIcon, TrashIcon } from "lucide-react";
-
-const transactioncategoryMap = {
-  [TransactionCategory.HOUSING]: "Moradia",
-  [TransactionCategory.EDUCATION]: "Educação",
-  [TransactionCategory.FOOD]: "Alimentação",
-  [TransactionCategory.HEALTH]: "Saúde",
-  [TransactionCategory.ENTERTRAIMENT]: "Entretenimento",
-  [TransactionCategory.TRANSPORTATION]: "Transporte",
-  [TransactionCategory.SALARY]: "Salario",
-  [TransactionCategory.UTILITY]: "Utilidades",
-  [TransactionCategory.OTHER]: "Outros",
-}
-const transationpaymentMap = {
-  [TransactionPaymentMethod.CASH]: "Dinheiro",
-  [TransactionPaymentMethod.CREDIT_CARD]: "Credito",
-  [TransactionPaymentMethod.DEBIT_CARD]: "Debito",
-  [TransactionPaymentMethod.BANK_TRANSFER]: "Transferencia",
-  [TransactionPaymentMethod.BANK_SLIP]: "Boleto",
-  [TransactionPaymentMethod.PIX]: "Pix",
-  [TransactionPaymentMethod.OTHER]: "Outros"
+import { transactioncategoryMap, transationpaymentMap } from "@/app/_contants/transaction";
 
 
-
-
-}
 
 export const TransactionColumns: ColumnDef<Transaction>[] = [
   {
