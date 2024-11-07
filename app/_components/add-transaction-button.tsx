@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPTIONS } from "../_contants/transaction";
 import { DatePicker } from "./ui/date-picker";
 import { addTransaction } from "../_actions/add-transaction";
+import { useState } from "react";
 
 
 
@@ -21,7 +22,11 @@ const formSchema = z.object({
     name: z.string().trim().min(1, {
         message: "Nome da transação é obrigatório e deve ter pelo menos 1 caractere.",
     }),
-    amount: z.number(),
+    amount: z.number({
+        message: "O Valor é obritatório"
+    }).positive({
+        message: "O valor deve ser positivo."
+    }),
     type: z.nativeEnum(TransactionType, {
         required_error: "Tipo transação é obrigatorio"
     }),
@@ -39,10 +44,11 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 
 const AddTransactionButton = () => {
+    const [dialogIsOpen, setDialogOpen] = useState(false)
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            amount: 0,
+            amount: 50,
             category: TransactionCategory.OTHER,
             date: new Date(),
             name: "",
@@ -52,17 +58,22 @@ const AddTransactionButton = () => {
     })
     const onSubmit = async (data: FormSchema) => {
         try {
-            await addTransaction(data)
+            await addTransaction(data);
+            setDialogOpen(false);
+            form.reset();
         } catch (err) {
             console.log(err);
         }
     }
     return (
-        <Dialog onOpenChange={(open) => {
-            if (!open) {
-                form.reset();
-            }
-        }}>
+        <Dialog
+            open={dialogIsOpen}
+            onOpenChange={(open) => {
+                setDialogOpen(open);
+                if (!open) {
+                    form.reset();
+                }
+            }}>
             <DialogTrigger asChild>
                 <Button className="rounded-full font-bold">
                     <ArrowDownUpIcon />
