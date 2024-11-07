@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownUpIcon, FileDiff } from "lucide-react";
+import { ArrowDownUpIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { z } from "zod";
@@ -11,8 +11,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "./ui/input";
 import MoneyInput from "./money-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPCOES, TRANSACTION_TYPE_OPTIONS } from "../_contants/transaction";
+import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPTIONS } from "../_contants/transaction";
 import { DatePicker } from "./ui/date-picker";
+import { addTransaction } from "../_actions/add-transaction";
 
 
 
@@ -20,9 +21,7 @@ const formSchema = z.object({
     name: z.string().trim().min(1, {
         message: "Nome da transação é obrigatório e deve ter pelo menos 1 caractere.",
     }),
-    amunt: z.string().trim().min(1, {
-        message: "Valor da transação é obrigatório e deve ter pelo menos 1 caractere.",
-    }),
+    amount: z.number(),
     type: z.nativeEnum(TransactionType, {
         required_error: "Tipo transação é obrigatorio"
     }),
@@ -43,17 +42,20 @@ const AddTransactionButton = () => {
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            amunt: "",
+            amount: 0,
             category: TransactionCategory.OTHER,
             date: new Date(),
             name: "",
             paymentMethod: TransactionPaymentMethod.CASH,
             type: TransactionType.EXPENSE,
-
         },
     })
-    const onSubmit = (data: FormSchema) => {
-
+    const onSubmit = async (data: FormSchema) => {
+        try {
+            await addTransaction(data)
+        } catch (err) {
+            console.log(err);
+        }
     }
     return (
         <Dialog onOpenChange={(open) => {
@@ -96,7 +98,10 @@ const AddTransactionButton = () => {
                                 <FormItem>
                                     <FormLabel>Valor</FormLabel>
                                     <FormControl>
-                                        <MoneyInput placeholder="Digite um valor ..." {...field} />
+                                        <MoneyInput placeholder="Digite um valor ..." onValueChange={({ floatValue }) => field.onChange(floatValue)}
+                                            onBlur={field.onBlur}
+                                            disabled={field.disabled}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -136,7 +141,7 @@ const AddTransactionButton = () => {
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Selecione a categoria" />
+                                                <SelectValue placeholder="Selecione o categoria" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>

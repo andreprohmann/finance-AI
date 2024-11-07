@@ -73,40 +73,40 @@ export const TRANSACTION_PAYMENT_METHOD_OPTIONS = [
 
 export const TRANSACTION_CATEGORY_OPTIONS = [
   {
-    Value: TransactionCategory.EDUCATION,
+    value: TransactionCategory.EDUCATION,
     label: transactioncategoryMap[TransactionCategory.EDUCATION],
   },
   {
-    Value: TransactionCategory.FOOD,
+    value: TransactionCategory.FOOD,
     label: transactioncategoryMap[TransactionCategory.FOOD],
   },
   {
-    Value: TransactionCategory.HEALTH,
+    value: TransactionCategory.HEALTH,
     label: transactioncategoryMap[TransactionCategory.HEALTH],
   },
   {
-    Value: TransactionCategory.HOUSING,
+    value: TransactionCategory.HOUSING,
     label: transactioncategoryMap[TransactionCategory.HOUSING],
   },
   {
-    Value: TransactionCategory.ENTERTRAIMENT,
+    value: TransactionCategory.ENTERTRAIMENT,
     label: transactioncategoryMap[TransactionCategory.ENTERTRAIMENT],
   },
   {
-    Value: TransactionCategory.TRANSPORTATION,
+    value: TransactionCategory.TRANSPORTATION,
     label: transactioncategoryMap[TransactionCategory.TRANSPORTATION],
   },
 
   {
-    Value: TransactionCategory.SALARY,
+    value: TransactionCategory.SALARY,
     label: transactioncategoryMap[TransactionCategory.SALARY],
   },
   {
-    Value: TransactionCategory.UTILITY,
+    value: TransactionCategory.UTILITY,
     label: transactioncategoryMap[TransactionCategory.UTILITY],
   },
   {
-    Value: TransactionCategory.OTHER,
+    value: TransactionCategory.OTHER,
     label: transactioncategoryMap[TransactionCategory.OTHER],
   },
 ];
