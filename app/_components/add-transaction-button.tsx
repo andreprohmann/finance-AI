@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowDownUpIcon } from "lucide-react";
+import { ArrowDownUpIcon, FileDiff } from "lucide-react";
 import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { z } from "zod";
 import { TransactionCategory, TransactionPaymentMethod, TransactionType } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,6 +12,7 @@ import { Input } from "./ui/input";
 import MoneyInput from "./money-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPCOES, TRANSACTION_TYPE_OPTIONS } from "../_contants/transaction";
+import { DatePicker } from "./ui/date-picker";
 
 
 
@@ -36,8 +37,10 @@ const formSchema = z.object({
     }),
 });
 
+type FormSchema = z.infer<typeof formSchema>
+
 const AddTransactionButton = () => {
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             amunt: "",
@@ -49,11 +52,15 @@ const AddTransactionButton = () => {
 
         },
     })
-    const onSubmit = () => {
+    const onSubmit = (data: FormSchema) => {
 
     }
     return (
-        <Dialog>
+        <Dialog onOpenChange={(open) => {
+            if (!open) {
+                form.reset();
+            }
+        }}>
             <DialogTrigger asChild>
                 <Button className="rounded-full font-bold">
                     <ArrowDownUpIcon />
@@ -170,11 +177,26 @@ const AddTransactionButton = () => {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Data</FormLabel>
+                                    <DatePicker value={field.value} onChange={field.onChange} />
 
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <DialogFooter>
-                            <Button variant="outline">Cancelar</Button>
-                            <Button>Adicionar</Button>
+
+                            <DialogClose asChild>
+                                <Button type="button" variant="outline">Cancelar</Button>
+                            </DialogClose>
+
+                            <Button type="submit">Adicionar</Button>
                         </DialogFooter>
                     </form>
                 </Form>
