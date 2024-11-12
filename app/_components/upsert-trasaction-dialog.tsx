@@ -1,6 +1,6 @@
-import { ArrowDownUpIcon } from "lucide-react";
+
 import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import MoneyInput from "./money-input";
@@ -11,12 +11,13 @@ import { TransactionCategory, TransactionPaymentMethod, TransactionType } from "
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addTransaction } from "../_actions/add-transaction";
+import { upsertTransaction } from "../_actions/add-transaction";
 
 interface UpsertTransactionDialogProps {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     defaultValues?: FormSchema;
+    transactionId?: string;
 }
 const formSchema = z.object({
     name: z.string().trim().min(1, {
@@ -43,7 +44,12 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-const UpersertTrasactionDialog = ({ isOpen, setIsOpen, defaultValues }: UpsertTransactionDialogProps) => {
+const UpersertTrasactionDialog = ({
+    isOpen,
+    setIsOpen,
+    defaultValues,
+    transactionId
+}: UpsertTransactionDialogProps) => {
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: defaultValues ?? {
@@ -58,7 +64,7 @@ const UpersertTrasactionDialog = ({ isOpen, setIsOpen, defaultValues }: UpsertTr
 
     const onSubmit = async (data: FormSchema) => {
         try {
-            await addTransaction(data);
+            await upsertTransaction({ ...data, id: transactionId });
             setIsOpen(false);
             form.reset();
         } catch (err) {
@@ -66,6 +72,7 @@ const UpersertTrasactionDialog = ({ isOpen, setIsOpen, defaultValues }: UpsertTr
         }
     }
 
+    const isUpdate = Boolean(transactionId)
     return (
         <Dialog
             open={isOpen}
@@ -78,7 +85,7 @@ const UpersertTrasactionDialog = ({ isOpen, setIsOpen, defaultValues }: UpsertTr
 
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Adicionar Transação</DialogTitle>
+                    <DialogTitle> {isUpdate ? 'Atualizar' : 'Criar'} Transação</DialogTitle>
                     <DialogDescription>Insira as informações abaixo</DialogDescription>
                 </DialogHeader>
 
@@ -207,7 +214,7 @@ const UpersertTrasactionDialog = ({ isOpen, setIsOpen, defaultValues }: UpsertTr
                                 <Button type="button" variant="outline">Cancelar</Button>
                             </DialogClose>
 
-                            <Button type="submit">Adicionar</Button>
+                            <Button type="submit"> {isUpdate ? 'Atualizar' : 'Adicionar'} </Button>
                         </DialogFooter>
                     </form>
                 </Form>
