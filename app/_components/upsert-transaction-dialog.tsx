@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { MoneyInput } from "./money-input";
 import {
   Select,
   SelectContent,
@@ -139,13 +140,13 @@ const UpsertTransactionDialog = ({
                 </FormItem>
               )}
             />
-            {/* <FormField
+            <FormField
               control={form.control}
               name="amount"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Valor</FormLabel>
-                  {/* <FormControl>
+                  <FormControl>
                     <MoneyInput
                       placeholder="Digite o valor..."
                       value={field.value}
@@ -155,11 +156,11 @@ const UpsertTransactionDialog = ({
                       onBlur={field.onBlur}
                       disabled={field.disabled}
                     />
-                  </FormControl> */}
-            {/* <FormMessage />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
             <FormField
               control={form.control}
               name="type"
