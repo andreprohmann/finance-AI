@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
-import MoneyInput from "./money-input";
+// import MoneyInput from "./money-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPTIONS } from "../_contants/transaction";
 import { DatePicker } from "./ui/date-picker";
@@ -104,22 +104,19 @@ const UpersertTrasactionDialog = ({
                                 </FormItem>
                             )}
                         />
-                        <FormField
+                        {/* <FormField
                             control={form.control}
                             name="amount"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Valor</FormLabel>
-                                    <FormControl>
+                                    {/* <FormControl>
                                         <MoneyInput placeholder="Digite um valor ..." onValueChange={({ floatValue }) => field.onChange(floatValue)}
                                             onBlur={field.onBlur}
                                             disabled={field.disabled}
                                         />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                    </FormControl> */}
+
                         <FormField
                             control={form.control}
                             name="type"
